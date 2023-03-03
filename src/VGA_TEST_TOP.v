@@ -7,9 +7,9 @@ module VGA_TEST_TOP(
 	output VGA_SYNC,
 	output VGA_CLK,
 	output display_on,
-	output [1:0] red,
-	output [1:0] green,
-	output [1:0] blue,
+	output [3:0] red,
+	output [3:0] green,
+	output [3:0] blue,
 
 	// flash connections
 
@@ -55,7 +55,6 @@ assign sram_lb  =  ready ? 1'b0 : sram_lb_for_copy;
 
 assign a0 = display_addr[0];
 
-// For a color RGB 3-3-2 image.
 
 /*
 always @(*)
@@ -79,6 +78,9 @@ begin
 	end
 end
 */
+
+// For a color RGB 3-3-2 image.
+
 assign red   = display_on ? { a0 ? sramData[15:13] : sramData[7:5], 1'b0} : 4'b0;
 assign green = display_on ? { a0 ? sramData[12:10] : sramData[4:2], 1'b0} : 4'b0;
 assign blue  = display_on ? { a0 ? sramData[9:8]   : sramData[1:0], 2'b0} : 4'b0;
@@ -120,18 +122,6 @@ flash2sram test_mod(
 	.sram_lb(sram_lb_for_copy),
 	.sram_ce(sram_ce)
 );
-
-
-
-//assign flash_oe = 1'b0;
-//assign flash_ce = 1'b0;
-//assign flash_we = 1'b1;
-
-//assign sram_oe = 1'b0;
-//assign sram_ce = 1'b0;
-//assign sram_we = 1'b1;
-//assign sram_lb = 1'b0;
-//assign sram_ub = 1'b0;
 
 always @(posedge clk50M, posedge n_ready)
 begin
