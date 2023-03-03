@@ -10,9 +10,10 @@ To use:
 - Add a 3-bit (or more) "rgb" output to the top level
 */
 
-module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, display_addr);
+module hvsync_generator(clk, clk25en, reset, hsync, vsync, display_on, hpos, vpos, display_addr);
 
   input clk;
+  input clk25en;
   input reset;
   output hsync, vsync;
   output display_on;
@@ -46,8 +47,8 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, displa
     if (reset) begin
       hpos <= H_MAX;
       vpos <= V_MAX;
-    end else begin
-      if (hpos == H_MAX) begin 
+    end else if (clk25en) begin
+      if (hpos == H_MAX) begin
         hpos <= 0;
         if (vpos == V_MAX) vpos <= 0;
         else vpos <= vpos + 10'b1;
@@ -55,18 +56,19 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, displa
     end
   end
 
+
   assign hsync = hpos >= H_SYNC_START && hpos <= H_SYNC_END;
   assign vsync = vpos >= V_SYNC_START && vpos <= V_SYNC_END;
 
   //assign display_on_early = (hpos < H_DISPLAY-1 && hpos == (H_DISPLAY+H_BACK+H_FRONT+H_SYNC-1)) 
   //               && ((vpos < V_DISPLAY-1) && vpos == (V_DISPLAY+V_TOP+V_BOTTOM+V_SYNC-1));
   
-  always @(posedge clk, posedge reset)
+always @(posedge clk, posedge reset)
   begin
     if (reset) begin
       display_on_early <= 0;
       display_on <= 0;
-    end else begin 
+    end else if (clk25en) begin
       display_on_early <= ((hpos < H_DISPLAY-1) || (hpos == H_MAX)) && (vpos < V_DISPLAY);
       display_on <= display_on_early;
     end
@@ -75,9 +77,11 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, displa
   always @(posedge clk, posedge reset)
   begin
     if (reset) display_addr <= 0;
-    else if (vpos == V_MAX) display_addr <= 0;
-    else if (display_on_early) display_addr <= display_addr + 1;
+    else if (clk25en && (vpos == V_MAX)) display_addr <= 0;
+    else if (clk25en && display_on_early) display_addr <= display_addr + 1;
   end
+
+
 
 endmodule
 
