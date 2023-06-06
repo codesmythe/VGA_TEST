@@ -1,4 +1,3 @@
-
 `ifndef HVSYNC_GENERATOR_H
 `define HVSYNC_GENERATOR_H
 
@@ -10,10 +9,9 @@ To use:
 - Add a 3-bit (or more) "rgb" output to the top level
 */
 
-module hvsync_generator(clk, clk25en, reset, hsync, vsync, display_on, hpos, vpos, display_addr);
+module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, display_addr);
 
   input clk;
-  input clk25en;
   input reset;
   output hsync, vsync;
   output display_on;
@@ -47,7 +45,7 @@ module hvsync_generator(clk, clk25en, reset, hsync, vsync, display_on, hpos, vpo
     if (reset) begin
       hpos <= H_MAX;
       vpos <= V_MAX;
-    end else if (clk25en) begin
+    end else if (clk) begin
       if (hpos == H_MAX) begin
         hpos <= 0;
         if (vpos == V_MAX) vpos <= 0;
@@ -68,7 +66,7 @@ always @(posedge clk, posedge reset)
     if (reset) begin
       display_on_early <= 0;
       display_on <= 0;
-    end else if (clk25en) begin
+    end else if (clk) begin
       display_on_early <= ((hpos < H_DISPLAY-1) || (hpos == H_MAX)) && (vpos < V_DISPLAY);
       display_on <= display_on_early;
     end
@@ -77,8 +75,8 @@ always @(posedge clk, posedge reset)
   always @(posedge clk, posedge reset)
   begin
     if (reset) display_addr <= 0;
-    else if (clk25en && (vpos == V_MAX)) display_addr <= 0;
-    else if (clk25en && display_on_early) display_addr <= display_addr + 1;
+    else if (clk && (vpos == V_MAX)) display_addr <= 0;
+    else if (clk && display_on_early) display_addr <= display_addr + 1;
   end
 
 
