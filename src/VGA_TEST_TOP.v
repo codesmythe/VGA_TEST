@@ -30,8 +30,6 @@ module VGA_TEST_TOP(
 	output sram_ce
 );
 
-wire [9:0] hpos;
-wire [9:0] vpos;
 wire reset;
 wire ready, n_ready;
 wire a0;
@@ -95,8 +93,7 @@ wire [15:0] sramDataForCopy;
 wire sram_we_for_copy, sram_oe_for_copy, sram_ub_for_copy, sram_lb_for_copy;
 
 hvsync_generator hvsync(
-   .clk(clk25M), .reset(~ready), .hsync(hsync), .vsync(vsync), .display_on(display_on), .hpos(hpos), .vpos(vpos), 
-   .display_addr(display_addr)
+   .clk(clk25M), .reset(~ready), .hsync(hsync), .vsync(vsync), .display_on(display_on), .display_addr(display_addr)
 );
 
 flash2sram test_mod(

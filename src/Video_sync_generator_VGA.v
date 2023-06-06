@@ -9,14 +9,12 @@ To use:
 - Add a 3-bit (or more) "rgb" output to the top level
 */
 
-module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, display_addr);
+module hvsync_generator(clk, reset, hsync, vsync, display_on, display_addr);
 
   input clk;
   input reset;
   output hsync, vsync;
   output display_on;
-  output reg [9:0] hpos;
-  output reg [9:0] vpos;
   output reg [18:0] display_addr;
 
   // declarations for VGA sync parameters
@@ -39,6 +37,8 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos, displa
   parameter V_MAX           = V_DISPLAY + V_TOP + V_BOTTOM + V_SYNC - 1;
   
   reg display_on, display_on_early;
+  reg [9:0] hpos;
+  reg [9:0] vpos;
   
   always @(posedge clk, posedge reset)
   begin
