@@ -6,20 +6,20 @@ module flash2sram(
 
     // Flash connections
     output [21:0] flashAddr,
-	input [7:0] flashData,
-	output flash_oe,
-	output flash_we,
-	output flash_ce,
-	output reg flash_rst,
+    input [7:0] flashData,
+    output flash_oe,
+    output flash_we,
+    output flash_ce,
+    output reg flash_rst,
 
-	// SRAM connections
-	output [17:0] sramAddr,
-	output [15:0] sramData,
-	output sram_oe,
-	output reg sram_we,
-	output sram_ub,
-	output sram_lb,
-	output sram_ce
+    // SRAM connections
+    output [17:0] sramAddr,
+    output [15:0] sramData,
+    output sram_oe,
+    output reg sram_we,
+    output sram_ub,
+    output sram_lb,
+    output sram_ce
 );
 
     reg [18:0] memAddr;
