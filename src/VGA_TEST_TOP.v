@@ -104,20 +104,20 @@ flash2sram test_mod(
 
     // Flash connections
     .flashAddr(flashAddr),
-	.flashData(flashData),
-	.flash_oe(flash_oe),
-	.flash_we(flash_we),
-	.flash_ce(flash_ce),
-	.flash_rst(flash_rst),
+    .flashData(flashData),
+    .flash_oe(flash_oe),
+    .flash_we(flash_we),
+    .flash_ce(flash_ce),
+    .flash_rst(flash_rst),
 
 	// SRAM connections
-	.sramAddr(sramAddrForCopy),
-	.sramData(sramDataForCopy),
-	.sram_oe(sram_oe_for_copy),
-	.sram_we(sram_we_for_copy),
-	.sram_ub(sram_ub_for_copy),
-	.sram_lb(sram_lb_for_copy),
-	.sram_ce(sram_ce)
+    .sramAddr(sramAddrForCopy),
+    .sramData(sramDataForCopy),
+    .sram_oe(sram_oe_for_copy),
+    .sram_we(sram_we_for_copy),
+    .sram_ub(sram_ub_for_copy),
+    .sram_lb(sram_lb_for_copy),
+    .sram_ce(sram_ce)
 );
 
 always @(posedge clk50M, posedge n_ready)
