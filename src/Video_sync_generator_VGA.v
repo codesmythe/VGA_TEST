@@ -54,19 +54,12 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, display_addr);
     end
   end
 
-
   assign hsync = hpos >= H_SYNC_START && hpos <= H_SYNC_END;
   assign vsync = vpos >= V_SYNC_START && vpos <= V_SYNC_END;
-
-  //assign display_on_early = (hpos < H_DISPLAY-1 && hpos == (H_DISPLAY+H_BACK+H_FRONT+H_SYNC-1)) 
-  //               && ((vpos < V_DISPLAY-1) && vpos == (V_DISPLAY+V_TOP+V_BOTTOM+V_SYNC-1));
   
-always @(posedge clk, posedge reset)
+  always @(posedge clk)
   begin
-    if (reset) begin
-      display_on_early <= 0;
-      display_on <= 0;
-    end else if (clk) begin
+    if (clk) begin
       display_on_early <= ((hpos < H_DISPLAY-1) || (hpos == H_MAX)) && (vpos < V_DISPLAY);
       display_on <= display_on_early;
     end
@@ -78,8 +71,6 @@ always @(posedge clk, posedge reset)
     else if (clk && (vpos == V_MAX)) display_addr <= 0;
     else if (clk && display_on_early) display_addr <= display_addr + 1;
   end
-
-
 
 endmodule
 
