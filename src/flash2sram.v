@@ -1,5 +1,5 @@
 module flash2sram(
-    input clk50M,
+    input clk,
     input reset,
 
     output reg ready,
@@ -40,7 +40,7 @@ module flash2sram(
     assign sram_ub  = ~memAddr[0];
     assign sram_lb  = memAddr[0];
 
-    always @(posedge clk50M, posedge reset)
+    always @(posedge clk)
     begin
         if (reset) begin 
             counter <= 0;
@@ -51,7 +51,7 @@ module flash2sram(
         end
     end
 
-    always @(posedge clk50M, posedge reset)
+    always @(posedge clk)
     begin
         
         if (reset) begin 
